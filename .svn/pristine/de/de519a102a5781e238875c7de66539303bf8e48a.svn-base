@@ -1,0 +1,130 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>        
+    </head>
+    <body>
+        <div id="wrap"><!-- class="bgCustome"-->
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">               
+                <div class="row">                                 
+                    <div class="col-md-12">
+                        <div class="page-header">
+                            <h3>Orders Report</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="branch_name" class="col-lg-4 control-label">Branch :</label>
+                                        <div class="col-lg-6">
+                                            <select class="branchComboBox" id="branchComboBox"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customer" class="col-lg-4 control-label">Customer :</label>
+                                        <div class="col-lg-6">
+                                            <select class="customer" id="customer"></select>
+                                        </div>
+                                        <button class="btn btn-info" id="rep_1_gen_btn"><i class="fa fa-adjust fa-lg"></i>&nbsp;Generate</button>
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Order Summary</h3>
+                                        <div class="pull-right">
+                                            <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body filterTableSearch">
+                                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters=".custmer_vice_orders_report_table"/>
+                                    </div>
+                                    <div class="scrollable" style="height: 300px; overflow-y: auto">
+                                        <table class="table table-bordered table-hover datable custmer_vice_orders_report_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Customer</th>
+                                                    <th>Job id</th>
+                                                    <th>Description</th>
+                                                    <th>Job Date</th>
+                                                    <th>Discount</th>
+                                                    <th>Qty</th>
+                                                    <th>Unit price</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                                             
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php // require_once './include/footerBar.php'; ?>
+        <?php require_once './include/systemFooter.php'; ?>
+    </body>
+    <script type="text/javascript">
+        $(function() {
+            pageProtect();
+            checkurl();
+            $('#logout').click(function() {
+                logout();
+            });
+
+            $(window).load(function() {
+                branch_ComboBox(false, function() {
+                    customer_ComboBox(false, $('#branchComboBox').val());
+                });
+            });
+            $('#branchComboBox').change(false, function() {
+                customer_ComboBox(false, $(this).val());
+            });
+            $('#rep_1_gen_btn').click(function() {
+                custmer_vice_orders_report_table(parseInt($('#customer').val()));
+            });
+
+            $('select').chosen({width: "100%"});
+            $(document).ready(function()
+            {
+                $(document).bind("contextmenu", function(e) {
+                    return false;
+                });
+            });
+            
+            document.onkeypress = function (event) {
+        event = (event || window.event);
+        if (event.keyCode == 123) {
+           //alert('No F-12');
+            return false;
+        }
+    }
+    document.onmousedown = function (event) {
+        event = (event || window.event);
+        if (event.keyCode == 123) {
+            //alert('No F-keys');
+            return false;
+        }
+    }
+document.onkeydown = function (event) {
+        event = (event || window.event);
+        if (event.keyCode == 123) {
+            //alert('No F-keys');
+            return false;
+        }
+    }
+
+        });
+    </script>
+</html>
+

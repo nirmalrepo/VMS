@@ -1,0 +1,93 @@
+.table tr td{  
+    border-color: #ffffff !important;
+    border: #ffffff none 0px !important;
+}
+.table tr th{  
+    border-color: #ffffff !important;
+    border: #ffffff none 0px !important;
+}
+
+.col-md-10{
+    border: #ffffff none 0px !important;
+}
+
+#billDiv{
+    margin-top:0cm;
+    margin-right:0cm;
+    margin-left:0cm;
+    margin-bottom:0cm;
+    max-width:19cm;
+    height: 15.2cm;
+}
+
+#billDiv #billNo{
+    padding-top:3.4cm;
+    padding-left:4.4cm;
+    max-width: 7.5cm;
+    overflow: hidden;
+}
+
+#billDiv #billDate{
+    padding-top: 3.4cm;
+    padding-left: 1.8cm;
+    max-width: 4cm;
+    overflow: hidden;
+}
+
+#billDiv #tradeOwnerName{
+    padding-top: 0.4cm;
+    padding-left:4.4cm;
+    max-width: 7.5cm;
+    overflow: hidden;
+}
+#billDiv #tradeName{
+    padding-top: 0.4cm;
+    padding-left:4.4cm;
+    max-width: 7.5cm;
+    overflow: hidden;
+}
+
+#billDiv #paymentDetails{
+    padding-top: 2cm;
+    padding-left:2cm;
+    max-width: 9cm;
+    overflow: hidden;
+}
+#billDiv #taxAmount{ 
+    text-align: right;
+    padding-top: 2cm;
+    padding-left:0.5cm;
+    max-width: 2.5cm;
+    overflow: hidden;
+}
+#billDiv #vatAmount{ 
+    text-align: right;
+    padding-top: 0.4cm;
+    padding-left:0.5cm;
+    max-width: 2.5cm;
+    overflow: hidden;
+}
+#billDiv #nbtAmount{ 
+    text-align: right;
+    padding-top: 0.4cm;
+    padding-left:0.5cm;
+    max-width: 2.5cm;
+    overflow: hidden;
+}
+
+#billDiv #stampAmount{ 
+    text-align: right;
+    padding-top: 0.4cm;
+    padding-left:0.5cm;
+    max-width: 2.5cm;
+    overflow: hidden;
+}
+/*#billDiv #totalPayable{ 
+    text-align: right;
+    padding-top: 2.5cm;
+    padding-left:14cm;
+    max-width: 3.5cm;
+    overflow: hidden;
+}*/
+
+

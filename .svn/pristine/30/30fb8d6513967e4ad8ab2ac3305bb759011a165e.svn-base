@@ -1,0 +1,32 @@
+
+//sanjeewa
+
+function branchComboBox(selected, callBack) {
+    var comboData = '';
+    $.post("views/loadComboBox.php", {comboBox: 'branchesComboBox'}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            comboData += '<option value="0"> -- No Data Found -- </option>';
+            $('.branchComboBox').html('').append(comboData);
+            chosenRefresh();
+        } else {
+            $.each(e, function(index, qData) {
+                if (selected !== undefined || e !== null || e.length !== 0) {
+                    if (parseInt(selected) === parseInt(qData.br_id)) {
+                        comboData += '<option value="' + qData.br_id + '" selected>' + qData.br_name + '</option>';
+                    } else {
+                        comboData += '<option value="' + qData.br_id + '">' + qData.br_name + '</option>';
+                    }
+                } else {
+                    comboData += '<option value="' + qData.br_id + '">' + qData.br_name + '</option>';
+                }
+            });
+            $('.branchComboBox').html('').append(comboData);
+            chosenRefresh();
+        }
+        if (callBack !== undefined) {
+            if (typeof callBack === 'function') {
+                callBack();
+            }
+        }
+    }, "json");
+}

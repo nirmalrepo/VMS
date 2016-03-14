@@ -1,0 +1,98 @@
+<?php
+include './config/dbc.php';
+$conn = new MainConfig();
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>          
+    </head>
+    <body>
+        <div id="wrap" class="home" >
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container">               
+                <div class="row">                                   
+                    <div class="col-md-12" style="margin-top: 60px;">
+                        <div class="row">
+                            <?php
+                            $data = array();
+                            $quary = "SELECT
+in_usrprvlg.usrID,
+in_sysprvlg.usrPrvMnuName,
+in_sysprvlg.usrPrvMnuIcon,
+in_sysprvlg.usrPrvMnuPath,
+in_usrprvlg.usrPrvCode
+FROM
+in_sysprvlg
+INNER JOIN in_usrprvlg ON in_usrprvlg.usrPrvCode = in_sysprvlg.prvCode
+                            WHERE in_usrprvlg.usrID = '{$_SESSION['user_id']}'";
+                            MainConfig::connectDB();
+                            $getLogeduser = mysql_query($quary)or die(mysql_error());
+                            MainConfig::closeDB();
+                            if (!empty($getLogeduser)) {
+                                while ($row = mysql_fetch_assoc($getLogeduser)) {
+                                    $data[] = $row;
+                                }
+                                foreach ($data AS $aa) {
+                                    echo '<a href="' . $aa['usrPrvMnuPath'] . '" class="fontChang">
+                                           <div class="col-md-3">
+                                             <div class="thumbnail ">
+                                              <img src="img/dashbord/' . $aa['usrPrvMnuIcon'] . '" style="width:80px; height:80px">
+                                              <div class="caption text-center" style="margin-top:-20px;">
+                                              <h3>' . $aa['usrPrvMnuName'] . '</h3>
+                                                  <p></p>
+                                                 </div>
+                                                  </div>
+                                                 </div>
+                                              </a>';
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <?php require_once './include/footerForDashBoard.php'; ?>
+        <?php require_once './include/systemFooter.php'; ?>
+    </body>
+    <script type="text/javascript">
+        $(function() {
+            pageProtect();
+            $('#logout').click(function() {
+                logout();
+            });
+
+            $(document).ready(function()
+            {
+                $(document).bind("contextmenu", function(e) {
+                    return false;
+                });
+            });
+
+            document.onkeypress = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-12');
+                    return false;
+                }
+            }
+            document.onmousedown = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-keys');
+                    return false;
+                }
+            }
+            document.onkeydown = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-keys');
+                    return false;
+                }
+            }
+        });
+    </script>
+</html>
+

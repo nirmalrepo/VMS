@@ -1,0 +1,72 @@
+
+
+//<?php
+////include '../config/dbc.php';
+//include_once (str_replace("\\", "/", __DIR__) . '/../config/dbc.php');
+//$conn = new MainConfig();
+//MainConfig::connectDB();
+//$allCount = mysql_query("SELECT
+//in_common_dt.cusCount,
+//in_common_dt.jbCount,
+//in_common_dt.delCount,
+//in_common_dt.billCount
+//FROM
+//in_common_dt
+//WHERE in_common_dt.brID = '{$_SESSION['branch']}'") or die(mysql_error());
+//MainConfig::closeDB();
+//if (!empty($allCount)) {
+//    while ($row = mysql_fetch_assoc($allCount)) {
+//        $cusCount = $row['cusCount'];
+//        $jbCount = $row['jbCount'];
+//        $delCount = $row['delCount'];
+//        $billCount = $row['billCount'];
+//    }
+//}
+//?>
+
+
+
+
+
+
+
+
+<!--<div class="pricing-table pricing-three-column row" style="margin-top: -145px;">
+    <div class="col-lg-2" style="margin-left: -20px;"></div>
+    <a href="customer_report.php">
+    <div class="plan col-sm-2 col-lg-2">
+        <div class="plan-name-bronze" style="background-color: #fa9f1e; color: black;">
+            <h2>//<?php echo $cusCount; ?></h2>
+            <span><b>Total Registered<br> Customers</b></span>
+        </div>
+        
+        
+    </div>
+    </a>
+    
+    <div class="plan col-sm-2 col-lg-2">
+        <div class="plan-name-bronze" style="background-color: #a6e1ec; color: black;">
+            <h2>//<?php echo $jbCount; ?></h2>
+            <span><b>Total Job<br> Count</b></span>
+        </div>
+    </div>
+    <div class="plan col-sm-2 col-lg-2">
+        <div class="plan-name-bronze" style="background-color: #f5e08f; color: black;">
+            <h2>//<?php echo $delCount; ?></h2>
+            <span><b>Total Delivery<br> Count </b></span>
+        </div>
+    </div>
+    <div class="plan col-sm-2 col-lg-2">
+        <div class="plan-name-bronze" style="background-color: #ce8483; color: black;">
+            <h2>//<?php echo $billCount; ?></h2>
+            <span><b>Total Invoice<br> Count</b></span>
+        </div>
+    </div>
+</div>-->
+
+<div id="footer">
+    <div class="container hidden-print">
+        <p class="text-muted credit text-center"><strong>© Copyrights Reserved 2014 - Invoice System. Designed & Developed By MDCC</strong></p>
+    </div>
+</div>
+

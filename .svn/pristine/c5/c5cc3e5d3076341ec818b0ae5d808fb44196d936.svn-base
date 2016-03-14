@@ -1,0 +1,87 @@
+<?php
+
+session_start();
+if (array_key_exists('make_dir', $_POST)) {
+    $_SESSION['dirname'] = $_POST['mkdir'];
+    if (!is_dir('js/fancybox/img/uploads/' . $_POST['mkdir'])) {
+        $makedir = mkdir('js/fancybox/img/uploads/' . $_POST['mkdir']);
+
+        if ($makedir) {
+            echo '1';
+        } else {
+            echo '0';
+//            session_destroy();
+            unset($_SESSION['dirname']);
+        }
+    } else {
+        echo '1';
+    }
+}
+if (array_key_exists('make_slide', $_POST)) {
+    $slide = $_POST['mkdir'];
+    $root = $_SERVER['DOCUMENT_ROOT'] . '/VMS/js/fancybox/img/uploads/' . $slide;
+    $images = array_diff(scandir($root), array('..', '.'));
+    echo json_encode($images);
+}
+
+header('Content-Type: application/json');
+if (isset($_FILES['images']) && !empty($_FILES['images'])) {
+    foreach ($_FILES["images"]["error"] as $key => $error) {
+        if ($error == UPLOAD_ERR_OK) {
+            $name = $_FILES["images"]["name"][$key];
+            $yo = move_uploaded_file($_FILES["images"]["tmp_name"][$key], "js/fancybox/img/uploads//" . $_SESSION['dirname'] . "/" . $_FILES['images']['name'][$key]);
+            echo json_encode($yo);
+            unset($_SESSION['dirname']);
+        }
+    }
+}
+
+
+//echo "<h2>Successfully Uploaded Images</h2>";
+//}
+//function to get the extension of the file
+//function getExt($name){
+// $array = explode(".", $name);
+// $ext = strtolower(end($array));
+// return $ext;
+//}
+//
+////create global array
+//$allowed = array('gif', 'png', 'jpg');
+//$success = array();
+//$error = array();
+//
+//if(isset($_FILES['file']) && !empty($_FILES['file'])){
+//  foreach ($_FILES['file']['name'] as $key => $name) {
+//   $tmp = $_FILES['file']['tmp_name'][$key];
+//   $ext = getExt($name);
+//   $size = $_FILES['file']['size'][$key];
+//
+//   // check the extension is valid or not
+//   if(in_array($ext, $allowed) == true){
+//    $filename = md5($name) . time() .'.'.$ext;
+//    //check the size of the file
+//    if($size <= 2097152){
+//     if(move_uploaded_file($tmp, 'uploads/'.$filename) === true){
+//      $success[] = array('name' => $name, 'location' => 'uploads/'.$filename);
+//     }else{
+//      $error[] = array('name' => $name, 'msg' => 'File is not uploaded');
+//     }
+//    }else{
+//     $error[] = array('name' => $name, 'msg' => 'File size more than 2MB');
+//    }
+//   }else{
+//    $error[] = array('name' => $name, 'msg' => 'File Type not allowed');
+//   }
+//  }
+//  
+//  //encode the result in json format
+//  $json = json_encode(array(
+//   'success' => $success,
+//   'error' => $error
+//  ));
+//
+//  echo $json;
+//  exit();
+//}
+?>

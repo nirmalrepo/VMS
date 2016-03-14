@@ -1,0 +1,230 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?> 
+        <link type="text/css" href="./css/bootstrap-colorpicker.min.css" rel="stylesheet" >
+    </head>
+    <body>
+        <div id="wrap">
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">
+                <!--<div class="row">-->
+                <div class="form-group col-md-12">
+                    <div class="page-header">
+                        <h3>Driver Registration</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-horizontal" >
+                                <div class="col-md-12 form-group">
+                                    <label class="col-md-4 text-right">Branch:</label>
+                                    <div class="col-md-6">
+                                        <select class="branchCombo" id="branchCombo"><option></option></select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_id" class="col-md-4 control-label text-right">Driver ID:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="dr_id" class="form-control dr_id" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_fname" class="col-md-4 control-label text-right">First Name:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="dr_fname" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_lname" class="col-md-4 control-label text-right">Last Name:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="dr_lname" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_gen" class="col-md-4 control-label text-right">Gender:</label>
+                                    <div class="col-md-6">
+                                        <select class="genderCom form-control" id="genderCom">
+                                            <option value="1">Male</option>
+                                            <option value="2">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_nic" class="col-md-4 control-label text-right">N.I.C:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="dr_nic" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="dr_add" class="col-md-4 control-label text-right">Address:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="dr_add" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="li_no" class="col-md-4 control-label text-right">Licence No.:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="li_no" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="desc_rip" class="col-md-4 control-label text-right">Description:</label>
+                                    <div class="col-md-6">
+                                        <input type="text"  id="desc_rip" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6 col-md-offset-4">
+                                            <span  id="customerregSaveActionBtn" class="">
+                                                <button class="btn btn-success" id="dri_reg_Save" style="width: 150px;height:60px "><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div id="main_data_table_div">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Driver's Informations</h3>
+                                        <div class="pull-right">
+                                            <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body filterTableSearch">
+                                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters=".vehicle_repair_data_table"/>
+                                    </div>
+                                    <div class="scrollable" style="height: 220px; overflow-y: auto">
+                                        <table class="table table-bordered table-striped table-hover datable driver_data_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>                                                                   
+                                                    <th>Gender</th>
+                                                    <th>N.I.C</th>
+                                                    <th>Licence No.</th>
+                                                    <th>Actions</th>
+                                                    <!--<th></th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                                             
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<hr>-->
+                        <!--<hr>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="model2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Duty Assign
+                            <span class="pull-right" id='branch_for_model'></span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label class="col-md-4 text-right">Reg.No:</label>
+                                <div class="col-md-6">
+                                    <select class="driverComboBox" id="driverComboBox"><option></option></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="desc_rip" class="col-md-4 control-label text-right">Start Date:</label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                                <input type="text" class="form-control datepicker insDate" id="insDate" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="desc_rip" class="col-md-4 control-label text-right">Start Date:</label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                                <input type="text" class="form-control datepicker insDate" id="insDate" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php require_once './include/systemFooter.php'; ?>
+            <script type="text/javascript" src="js/bootstrap-colorpicker.js"></script>
+    </body>
+    <script type="text/javascript">
+        $(function () {
+            $('select').chosen({width: "100%"});
+            branch_combo_box_load(false, function () {
+                dr_id_val_load($('#branchCombo').val());
+                driver_registration_tabele($('#branchCombo').val());
+            });
+
+
+            $('#branchCombo').change(function () {
+
+                var branchVal = $(this).val();
+                dr_id_val_load(branchVal);
+                driver_registration_tabele(branchVal);
+            });
+
+            $('#dri_reg_Save').click(function () {
+                save_driver_reg(function () {
+                    driver_registration_tabele($('#branchCombo').val(), function () {
+//                        empty_machine_repair_data();
+                    });
+                });
+            });
+            $('.datepicker').datepicker({
+                orientation: "auto left"
+            });
+            $('.demo2').colorpicker({
+                orientation: "auto left"
+            });
+
+
+            $(".fancybox").fancybox({
+                openEffect: 'none',
+                closeEffect: 'none'
+            });
+
+            /////////////////upload////////////////
+
+
+        });
+    </script>
+
+
+</html>
+
+

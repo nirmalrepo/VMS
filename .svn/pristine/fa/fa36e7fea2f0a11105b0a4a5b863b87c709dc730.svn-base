@@ -1,0 +1,650 @@
+function save_vehicle_reg(cb) {
+    var branchCombo = $('#branchCombo').val();
+    var typeCombo = $('#typeCombo').val();
+    var purCombo = $('#purCombo').val();
+    var manuCombo = $('#manuCombo').val();
+    var conCombo = $('#conCombo').val();
+    var brandCombo = $('#brandCombo').val();
+    var insCombo = $('#insCombo').val();
+    var statusCombo = $('#statusCombo').val();
+    var vid = $('#vid').val();
+    var regNo = $('#regNo').val();
+    var reg_Date = $('#reg_Date').val();
+    var volume = $('#volume').val();
+    var procure = $('#procure').val();
+    var fuelComb = $('#fuelComb').val();
+    var weight = $('#weight').val();
+    var engineC = $('#engineC').val();
+    var manuY = $('#manuY').val();
+    var fuelCa = $('#fuelCa').val();
+    var valueRs = $('#valueRs').val();
+    var colour = $('#colour').val();
+    var driverName = $('#driverName').val();
+    var insDate = $('#insDate').val();
+//    alert(regNo);
+    if ($.trim(regNo).length == 0) {
+        alertify.error("Enter Reg.No!", 3000);
+        return;
+    }
+    if ($.trim(reg_Date).length == 0) {
+        alertify.error("Enter Reg.Date!", 3000);
+        return;
+    }
+    if ($.trim(procure).length == 0) {
+        alertify.error("Enter Procure", 3000);
+        return;
+    }
+    if ($.trim(manuY).length == 0) {
+        alertify.error("Enter Manufacture Year!", 3000);
+        return;
+    }
+    if ($.trim(valueRs).length == 0) {
+        alertify.error("Enter Value!", 3000);
+        return;
+    }
+    if ($.trim(driverName).length == 0) {
+        alertify.error("Enter Driver NAme!", 3000);
+        return;
+    }
+    if ($.trim(insDate).length == 0) {
+        alertify.error("Enter Insurance Date!", 3000);
+        return;
+    }
+    $.post("views/commenSettingView.php", {action: 'save_vehicle_reg',
+        branchCombo: branchCombo,
+        typeCombo: typeCombo,
+        purCombo: purCombo,
+        manuCombo: manuCombo,
+        conCombo: conCombo,
+        brandCombo: brandCombo,
+        insCombo: insCombo,
+        statusCombo: statusCombo,
+        vid: vid,
+        regNo: regNo,
+        reg_Date: reg_Date,
+        volume: volume,
+        procure: procure,
+        fuelComb: fuelComb,
+        weight: weight,
+        engineC: engineC,
+        manuY: manuY,
+        fuelCa: fuelCa,
+        valueRs: valueRs,
+        colour: colour,
+        driverName: driverName,
+        insDate: insDate}, function (e) {
+        alertifyMsgDisplay(e, 3000, function () {
+            if ($.type(cb) === 'function') {
+                cb();
+            }
+        });
+    }, "json");
+}
+///////////////////////Table load////////////////////////////////
+function reload_page() {
+    location.reload();
+}
+
+function vehicle_registration_tabele(branchVal, cb) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "registerd_vehicle_table", branchVal: branchVal}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.vehicle_save_Table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function (index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.type_name + '</td>';
+                tableData += '<td>' + qData.brand_name + '</td>';
+                tableData += '<td>' + qData.vh_reg_no + '</td>';
+                tableData += '<td>' + qData.vh_mnu_year + '</td>';
+                tableData += '<td>' + qData.vh_value + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_customer " value="' + qData.s_id + '"><i class="fa fa-plus-square fa-lg"></i></button>'
+                        + '<button class="btn btn-danger delete_customer" value="' + qData.s_id + '"><i class="fa fa-trash-o fa-lg"></i></button>' + '<button class="btn btn-success report"id="report" value="' + qData.s_id + '" data-toggle="modal" data-target="#model2"><i class="fa fa-file fa-lg"></i>&nbsp;View Report</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.vehicle_save_Table tbody').html('').append(tableData);
+            tableSorter();
+            $('.select_customer').click(function () {
+                select_vehicle($(this).val());
+                $('#cust_reg_ActionBtn').removeClass('hidden');
+                $('#reset_cust').removeClass('hidden');
+                $('#customerregSaveActionBtn').addClass('hidden');
+                $('#cust_reg_Update').removeClass('hidden');
+            });
+            $('.delete_customer').click(function () {
+                delete_vehicle($(this).val(), function () {
+                    vehicle_registration_tabele(branchVal);
+                    empty_machine_repair_data();
+                });
+            });
+            $('.report').click(function () {
+                var value = $(this).val();
+                data_to_modal($(this).val(), function () {
+                    model_view_slide(value);
+                });
+            });
+        }
+        if ($.type(cb) === 'function') {
+            cb();
+        }
+    }, "json");
+}
+
+function select_vehicle(sid) {
+    $.post("views/commenSettingView.php", {action: 'vehicle_select', sid: sid}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            alert('error');
+        } else {
+            $('#branchCombo').val(e[0].br_id);
+            $('#typeCombo').val(e[0].vh_type_id);
+            $('#purCombo').val(e[0].vh_pur_id);
+            $('#manuCombo').val(e[0].vh_mcntry_id);
+            $('#conCombo').val(e[0].vh_condition_id);
+            $('#brandCombo').val(e[0].vh_brand_id);
+            $('#insCombo').val(e[0].vh_insuc_id);
+            $('#statusCombo').val(e[0].cusTel);
+            $('#vid').val(e[0].vh_id);
+            $('#regNo').val(e[0].vh_reg_no);
+            $('#reg_Date').val(e[0].vh_reg_date);
+            $('#volume').val(e[0].vh_volumn);
+            $('#procure').val(e[0].vh_procure);
+            $('#fuelComb').val(e[0].vh_fual_comb);
+            $('#weight').val(e[0].vh_weight);
+            $('#engineC').val(e[0].vh_engine_cap);
+            $('#manuY').val(e[0].vh_mnu_year);
+            $('#fuelCa').val(e[0].vh_fuel_cap);
+            $('#valueRs').val(e[0].vh_value);
+            $('#colour').val(e[0].vh_color);
+            $('#driverName').val(e[0].vh_driver_name);
+            $('#insDate').val(e[0].vh_insu_date);
+            $('#branchCombo').prop('disabled', true);
+            $('#branchCombo').attr('disabled', true);
+            scrollToElement('html');
+            $('#iconColor').css("background-color", e[0].vh_color);
+            var brid = $('#branchCombo').val();
+            var vid = $('#vid').val();
+            var mkdir = brid + '-'.concat(vid);
+            view_slide(mkdir);
+            chosenRefresh();
+        }
+    }, "json");
+}
+
+function delete_vehicle(sid, cb) {
+    confirm("Delete Data", "Are you sure want to delete data", "No", "Yes", function () {
+        $.post("views/commenSettingView.php", {action: 'delete_vehicles', sid: sid}, function (e) {
+            alertifyMsgDisplay(e, 2000, function () {
+                if ($.type(cb) === 'function') {
+                    cb();
+                }
+            });
+        }, "json");
+    });
+}
+
+function update_vehicle_reg(cb) {
+    var branchCombo = $('#branchCombo').val();
+    var typeCombo = $('#typeCombo').val();
+    var purCombo = $('#purCombo').val();
+    var manuCombo = $('#manuCombo').val();
+    var conCombo = $('#conCombo').val();
+    var brandCombo = $('#brandCombo').val();
+    var insCombo = $('#insCombo').val();
+    var statusCombo = $('#statusCombo').val();
+    var vid = $('#vid').val();
+    var regNo = $('#regNo').val();
+    var reg_Date = $('#reg_Date').val();
+    var volume = $('#volume').val();
+    var procure = $('#procure').val();
+    var fuelComb = $('#fuelComb').val();
+    var weight = $('#weight').val();
+    var engineC = $('#engineC').val();
+    var manuY = $('#manuY').val();
+    var fuelCa = $('#fuelCa').val();
+    var valueRs = $('#valueRs').val();
+    var colour = $('#colour').val();
+    var driverName = $('#driverName').val();
+    var insDate = $('#insDate').val();
+    $.post("views/commenSettingView.php", {action: 'update_vehicle_reg',
+        branchCombo: branchCombo,
+        typeCombo: typeCombo,
+        purCombo: purCombo,
+        manuCombo: manuCombo,
+        conCombo: conCombo,
+        brandCombo: brandCombo,
+        insCombo: insCombo,
+        statusCombo: statusCombo,
+        vid: vid,
+        regNo: regNo,
+        reg_Date: reg_Date,
+        volume: volume,
+        procure: procure,
+        fuelComb: fuelComb,
+        weight: weight,
+        engineC: engineC,
+        manuY: manuY,
+        fuelCa: fuelCa,
+        valueRs: valueRs,
+        colour: colour,
+        driverName: driverName,
+        insDate: insDate}, function (e) {
+        alertifyMsgDisplay(e, 1000, function () {
+            if ($.type(cb) === 'function') {
+                cb();
+            }
+        });
+    }, "json");
+}
+
+function data_to_modal(sid, cb) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "modal_table", sid: sid}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.modal_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function (index, qData) {
+                index++;
+                tableData += '<tr><td>Branch</td><td>' + qData.br_name + '</td></tr>';
+                tableData += '<tr><td>Type</td><td>' + qData.type_name + '</td></tr>';
+                tableData += '<tr><td>Purpose</td><td>' + qData.pur_name + '</td></tr>';
+                tableData += '<tr><td>Manufacture Country</td><td>' + qData.mcntry_name + '</td></tr>';
+                tableData += '<tr><td>Condition</td><td>' + qData.condition_name + '</td></tr>';
+                tableData += '<tr><td>Brand</td><td>' + qData.brand_name + '</td></tr>';
+                tableData += '<tr><td>Insurance Company</td><td>' + qData.insuc_name + '</td></tr>';
+                tableData += '<tr><td>Status</td><td>' + qData.vh_status + '</td></tr>';
+                tableData += '<tr><td>Reg.No.</td><td>' + qData.vh_reg_no + '</td></tr>';
+                tableData += '<tr><td>Reg. Date</td><td>' + qData.vh_reg_date + '</td></tr>';
+                tableData += '<tr><td>Volume</td><td>' + qData.vh_volumn + '</td></tr>';
+                tableData += '<tr><td>Procure</td><td>' + qData.vh_procure + '</td></tr>';
+                tableData += '<tr><td>Fuel Combustion(Km)</td><td>' + qData.vh_fual_comb + '</td></tr>';
+                tableData += '<tr><td>Weight(Kg</td><td>' + qData.vh_weight + '</td></tr>';
+                tableData += '<tr><td>En.Cap.(CC-Km/L)</td><td>' + qData.vh_engine_cap + '</td></tr>';
+                tableData += '<tr><td>Manufacture Year</td><td>' + qData.vh_mnu_year + '</td></tr>';
+                tableData += '<tr><td>Fuel Capacity(L)</td><td>' + qData.vh_fuel_cap + '</td></tr>';
+                tableData += '<tr><td>Value(Rs.)</td><td>' + qData.vh_value + '</td></tr>';
+                tableData += '<tr><td>Colour</td><td style="background-color:' + qData.vh_color + '">' + qData.vh_color + '</td></tr>';
+                tableData += '<tr><td>Driver Name</td><td>' + qData.vh_driver_name + '</td></tr>';
+                tableData += '<tr><td>Insurance Date</td><td>' + qData.vh_insu_date + '</td></tr>';
+            });
+            $('.modal_table tbody').html('').append(tableData);
+            tableSorter();
+        }
+        if ($.type(cb) === 'function') {
+            cb();
+        }
+    }, "json");
+}
+function reg_no_load(selected) {
+    var comboData = '';
+    $.post("views/loadComboBox.php", {comboBox: 'regcomboComboBox', selected: selected}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            comboData += '<option value="0"> -- No Data Found -- </option>';
+            $('.regCombo').html('').append(comboData);
+            chosenRefresh();
+        } else {
+            $.each(e, function (index, qData) {
+                if (selected !== undefined || e !== null || e.length !== 0) {
+                    if (parseInt(selected) === parseInt(qData.br_id)) {
+                        comboData += '<option value="' + qData.vh_reg_no + '" selected>' + qData.vh_reg_no + '</option>';
+                    } else {
+                        comboData += '<option value="' + qData.vh_reg_no + '">' + qData.vh_reg_no + '</option>';
+                    }
+                } else {
+                    comboData += '<option value="' + qData.vh_reg_no + '">' + qData.vh_reg_no + '</option>';
+                }
+            });
+            $('.regCombo').html('').append(comboData);
+            chosenRefresh();
+        }
+    }, "json");
+}
+
+function generate_repair_table(branchCombo, regCombo, i) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "generate_re_forms", branchCombo: branchCombo, regCombo: regCombo, options: i}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.vehicle_repair_data_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function (index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                if (i == 1) {
+                    tableData += '<td>' + qData.vh_reg_no + '</td>';
+                }
+                tableData += '<td>' + qData.rp_date + '</td>';
+                tableData += '<td>' + qData.rp_desc + '</td>';
+                tableData += '<td>' + qData.rp_place + '</td>';
+                tableData += '<td>' + qData.rp_cost + '</td>';
+                if (i == 1) {
+                    tableData += '<td><div class="btn-group"><button class="btn btn-success report" value="' + qData.rp_id + '" data-toggle="modal" data-target="#model2"><i class="fa fa-file fa-lg"></i></button></div></td>';
+                }
+                tableData += '</tr>';
+            });
+            $('.vehicle_repair_data_table tbody').html('').append(tableData);
+            tableSorter();
+            $('.report').click(function () {
+                data_to_repair_modal($(this).val());
+            });
+        }
+    }, "json");
+}
+
+function data_to_repair_modal(rid) {
+    var tableData = '';
+    var Data = '';
+    $.post("views/loadTables.php", {table: "modal_repair_table", rid: rid}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.modal_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function (index, qData) {
+                index++;
+                Data += '<span>Reg.No:&nbsp;' + qData.vh_reg_no + '</span>';
+                tableData += '<tr><td>Branch</td><td>' + qData.br_name + '</td></tr>';
+                tableData += '<tr><td>Reg.No.</td><td>' + qData.vh_reg_no + '</td></tr>';
+                tableData += '<tr><td>Date</td><td>' + qData.rp_date + '</td></tr>';
+                tableData += '<tr><td>Date</td><td>' + qData.rp_date + '</td></tr>';
+                tableData += '<tr><td>Repaired Place</td><td>' + qData.rp_place + '</td></tr>';
+                tableData += '<tr><td>Description</td><td>' + qData.rp_desc + '</td></tr>';
+                tableData += '<tr><td>Cost</td><td>' + qData.rp_cost + '</td></tr>';
+            });
+            $('.modal-header h4').html('').append(Data);
+            $('.modal_table tbody').html('').append(tableData);
+            tableSorter();
+        }
+    }, "json");
+}
+function data_to_dispose_modal(did) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "modal_dispose_table", did: did}, function (e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.modal_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function (index, qData) {
+                index++;
+                tableData += '<tr><td>Branch</td><td>' + qData.br_name + '</td></tr>';
+                tableData += '<tr><td>Reg.No.</td><td>' + qData.vh_reg_no + '</td></tr>';
+                tableData += '<tr><td>Type</td>';
+                if (qData.type == 1) {
+                    tableData += '<td>Dispose</td></tr>';
+                }
+                else {
+                    tableData += '<td>Auction</td></tr>';
+                }
+                tableData += '<tr><td>Date</td><td>' + qData.disp_date + '</td></tr>';
+                tableData += '<tr><td>Description</td><td>' + qData.desc + '</td></tr>';
+                tableData += '<tr><td>Sell Amount</td><td>' + qData.sell_amt + '</td></tr>';
+            });
+            $('.modal_table tbody').html('').append(tableData);
+            tableSorter();
+        }
+    }, "json");
+}
+
+function reset_target_form(target, callback) {
+    $(target).find('input[type=hidden]').val('');
+    $(target).find('.form-control-static').html('');
+    $(target).find('.form-control').val('');
+    $(target).find('.form-control').not('input,select').html('');
+    var selects = $(target).find('select');
+    $.each(selects, function (i, el) {
+        $(el).val($(el).find('option:first').val());
+    });
+    chosenRefresh();
+    if ($.type(callback) === 'function') {
+        callback();
+    }
+}
+
+function scrollToElement(el) {
+    $('html, body').animate({scrollTop: $(el).offset().top}, 500);
+}
+
+function empty_machine_repair_data() {
+    reset_target_form('#wrap', function () {
+        scrollToElement('html');
+        vid_val_load($('#branchCombo').val());
+    });
+}
+function make_dir(mkdir, cb) {
+    $.post("upload.php", {make_dir: "make_dir", mkdir: mkdir}, function (e) {
+        if (e == 1) {
+            if ($.type(cb) === 'function') {
+                cb();
+            }
+//            upload_image(input);
+        } else {
+            alert('erooor');
+        }
+
+    }
+    );
+}
+function view_slide(mkdir) {
+    var tableData = '';
+    $.post("upload.php", {make_slide: "make_slide", mkdir: mkdir}, function (e) {
+        if (e) {
+            $.each(e, function (index, qData) {
+                if (qData.msg == 1) {
+                    tableData += ' <div class="item active">';
+                    tableData += ' <div class="row-fluid">';
+                    tableData += '<div><a class=" thumbnail fancybox" rel="gallery1" href="js/fancyBox/img/uploads/default/default.jpg" title="">';
+                    tableData += '<img  src ="js/fancyBox/img/uploads/default/default.jpg" alt = ""  style = "height: 200px; width:300px;" / >';
+                    tableData += '</a>'
+                    tableData += '</div>'
+                    tableData += '</div>'
+                    tableData += '</div>'
+                } else {
+                    if (index == 2) {
+                        tableData += ' <div class="item active">';
+                    } else {
+
+                        tableData += ' <div class="item">';
+                    }
+                    tableData += ' <div class="row-fluid">';
+                    tableData += '<div><a class=" thumbnail fancybox" rel="gallery1" href="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '"title="">';
+                    tableData += '<img  src ="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '"alt = ""  style = "height: 200px; width:300px;" / >';
+                    tableData += '</a>'
+                    tableData += '</div>'
+                    tableData += '</div>'
+                    tableData += '</div>'
+                }
+            });
+            $('.c1').html('').append(tableData);
+        }
+    }, "json");
+}
+function model_view_slide(mkdir) {
+    var tableData = '';
+    $.post("upload.php", {make_modal_slide: "make_modal_slide", mkdir: mkdir}, function (e) {
+        if (e) {
+            $.each(e, function (index, qData) {
+                if (qData.msg == 1) {
+                    tableData += '<a class="fancybox-thumb" rel="fancybox-thumb" \
+                href="js/fancyBox/img/uploads/default/default.jpg">\
+                <img src ="js/fancyBox/img/uploads/default/default.jpg" alt="" style = "height: 100px; width:150px;"/>\
+                </a>';
+                } else {
+                    tableData += '<a class="fancybox-thumb" rel="fancybox-thumb" \
+                href="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '">\
+                <img src="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '" alt="" style = "height: 100px; width:150px;"/>\
+                </a>';
+                }
+            });
+            $('#carousel').html(tableData);
+            installGallery();
+        }
+    }, "json");
+}
+function model_view_slide_repair(mkdir) {
+    var tableData = '';
+    $.post("upload.php", {make_modal_slide: "make_modal_slide", mkdir: mkdir}, function (e) {
+        if (e) {
+            $.each(e, function (index, qData) {
+                if (qData.msg == 1) {
+                    tableData += '<a class="fancybox-thumb" rel="fancybox-thumb" \
+                href="js/fancyBox/img/uploads/default/default.jpg">\
+                <img src ="js/fancyBox/img/uploads/default/default.jpg" alt="" style = "height: 100px; width:150px;"/>\
+                </a>';
+                } else {
+                    tableData += '<a class="fancybox-thumb" rel="fancybox-thumb" \
+                href="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '">\
+                <img src="js/fancyBox/img/uploads/' + mkdir + '/' + qData + '" alt="" style = "height: 100px; width:150px;"/>\
+                </a>';
+                }
+            });
+            $('#carousel').html(tableData);
+            installGallery_repair();
+        }
+    }, "json");
+}
+
+function installGallery() {
+//        $('#uploaded_imgs').isotope();
+    $('#carousel').carouFredSel({
+        width: 500,
+        height: 100,
+        items: 3,
+        auto: {
+            duration: 500,
+            timeoutDuration: 2500
+        },
+        prev: '#prev',
+        next: '#next',
+        pagination: '#pager',
+        direction: "left",
+        scroll: {
+            items: 1,
+            easing: "elastic",
+            duration: 250,
+            pauseOnHover: true
+        }
+    });
+    $(".fancybox-thumb").fancybox({
+        openEffect: 'elastic',
+        closeEffect: 'elastic',
+        helpers: {
+            title: {
+                type: 'inside'
+            },
+            thumbs: {
+                width: 50,
+                height: 50
+            },
+            overlay: {
+                closeClick: false
+            }
+        },
+        beforeShow: function () {
+//                $('#carousel').trigger('play');
+        }
+    });
+}
+function installGallery_repair() {
+//        $('#uploaded_imgs').isotope();
+    $('#carousel').carouFredSel({
+        width: 800,
+        height: 100,
+        items: 5,
+        auto: {
+            duration: 500,
+            timeoutDuration: 2500
+        },
+        prev: '#prev',
+        next: '#next',
+        pagination: '#pager',
+        direction: "left",
+        scroll: {
+            items: 1,
+            easing: "elastic",
+            duration: 250,
+            pauseOnHover: true
+        }
+    });
+    $(".fancybox-thumb").fancybox({
+        openEffect: 'elastic',
+        closeEffect: 'elastic',
+        helpers: {
+            title: {
+                type: 'inside'
+            },
+            thumbs: {
+                width: 50,
+                height: 50
+            },
+            overlay: {
+                closeClick: false
+            }
+        },
+        beforeShow: function () {
+//                $('#carousel').trigger('play');
+        }
+    });
+}
+function upload_image(input, cb) {
+    formdata = false;
+    if (window.FormData) {
+        formdata = new FormData();
+        document.getElementById("btn").style.display = "none";
+    }
+    if (formdata) {
+        var i = 0, len = input.files.length, img, reader, file;
+        for (; i < len; i++) {
+            file = input.files[i];
+            if (!!file.type.match(/image.*/)) {
+                formdata.append("images[]", file);
+            }
+        }
+        $.ajax({
+            url: "upload.php",
+            type: "POST",
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                var jd = JSON.parse(res);
+                if (jd) {
+                    alertify.success('Image uploaded successfully.', 2000);
+                } else {
+                    alertify.error('Image upload failed.', 2000);
+                }
+                if ($.type(cb) === 'function') {
+                    cb();
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+    else {
+        status = false;
+    }
+
+
+
+}
+function check_reg_no(data) {
+    if ($.trim(data).length == 0) {
+        $('#regValidate').html('');
+    } else {
+        var data_for_search = data;
+        $.post("views/commenSettingView.php", {action: 'search_reg_no', data_for_search: data_for_search},
+        function (e) {
+            if (e.msgType == 1) {
+                $('#regValidate').html(e.msg);
+            } else {
+                $('#regValidate').html('');
+            }
+        }, "json");
+    }
+}
+
+

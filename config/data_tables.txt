@@ -1,0 +1,8 @@
+at_system_users
+ac_year_loan_balance
+ac_tax_rate
+ac_income_expense_type
+ac_finance_type
+ac_employee_loan_category
+ac_deposit_types
+ac_controler

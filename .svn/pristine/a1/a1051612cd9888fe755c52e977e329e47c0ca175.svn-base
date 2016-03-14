@@ -1,0 +1,557 @@
+//////////////// VIRAJ \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+function registerd_branch_table() {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "registerd_branch_table"}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.registerd_branch_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.brName + '</td>';
+                tableData += '<td>' + qData.brTel + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_branch" value="' + qData.brID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button>'
+                        + '<button class="btn btn-danger delete_branch" value="' + qData.brID + '"><i class="fa fa-trash-o fa-lg"></i>&nbsp;Delete</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.registerd_branch_table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.select_branch').click(function() {
+                select_branches($(this).val());
+            });
+            $('.delete_branch').click(function() {
+                var branchID = $(this).val();
+                confirm("Delete Branch", "Are You Want To Delete This Branch", "Cancel", "Delete", function() {
+                    delete_branches(branchID);
+                });
+            });
+        }
+    }, "json");
+}
+function job_registration_data_table() {
+    var tableData = '';
+    var branch_id = $('#branchComboBox').val()
+    var custmer_ID = $('#customer').val()
+//    alert('branch- ' + branch_id + ' / custmer- ' + custmer_ID);
+    $.post("views/loadTables.php", {table: "job_registration_data_table", branch_id: branch_id, custmer_ID: custmer_ID}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="8" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.job_registration_data_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.jbDt + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_jobreg" value="' + qData.aiID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button>';
+                tableData += '</tr>';
+            });
+            $('.job_registration_data_table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.select_jobreg').click(function() {
+                select_job_details($(this).val());
+            });
+
+//            $('.delete_branch').click(function() {
+//                delete_branches($(this).val());
+//            });
+        }
+
+    }, "json");
+}
+function job_registration_data_ForDilivary() {
+    var tableData = '';
+    var branch_id = $('#branchComboBox').val()
+    var custmer_ID = $('#customer').val()
+//    alert('branch- ' + branch_id + ' / custmer- ' + custmer_ID);
+    $.post("views/loadTables.php", {table: "job_registration_dataForDeleivary_table", branch_id: branch_id, custmer_ID: custmer_ID}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="8" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.job_registration_data_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.jbDt + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_jobreg" value="' + qData.aiID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button>';
+                tableData += '</tr>';
+            });
+            $('.job_registration_data_table tbody').html('').append(tableData);
+            tableSorter('.job_registration_data_table');
+
+            $('.select_jobreg').click(function() {
+                var jobTblID = $(this).val();
+                setDataToDelivary(jobTblID);
+            });
+        }
+
+    }, "json");
+}
+function add_items_for_jobs_table() {
+    var job_id = $('#jobID').val();
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "add_items_for_jobs_table", job_id: job_id}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="8" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('#added_items_for_jobs_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbDescription + '</td>';
+                tableData += '<td>' + qData.jbItemQty + '</td>';
+                tableData += '<td>' + qData.jbItemunitPrice + '</td>';
+                tableData += '<td>' + qData.jbDiscountRate + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-danger delete_items" value="' + qData.aid + '"><i class="fa fa-plus-times fa-lg"></i>&nbsp;Delete</button>';
+                tableData += '</tr>';
+            });
+            $('#added_items_for_jobs_table tbody').html('').append(tableData);
+            tableSorter('.job_registration_data_table');
+
+            $('.delete_items').click(function() {
+                delete_job_item(parseInt($(this).val()));
+            });
+        }
+        $('#item_details_table_panel').html('Added Item Details :: Job ID - ' + job_id);
+    }, "json");
+}
+
+function setDataToDelivary(data) {
+    $.post("views/loadTables.php", {table: "getdataToDelivary", tblID: data}, function(e) {
+        job_ComboBox($('.branchComboBox').val(), e[0]['jbID'], function() {
+            delivery_table();
+        });
+        $('#jobDesc').val(e[0]['jbDesc']);
+        $('#orderdQty').val('Ordered Qty. : ' + e[0]['jbQty']);
+        if (e[0]['totdeed'] == null) {
+            $('#DleverdQty').val('Currently Delivered Qty. : 0');
+        } else {
+            $('#DleverdQty').val('Currently Delivered Qty. : ' + e[0]['delQty']);
+        }
+        $('#cutomer').val('Customer Reg No. : ' + e[0]['cusID']);
+        $('#delveredQty').val(e[0]['totdeed']);
+    }, "json");
+}
+
+///////////////////// reports ////////////////////
+function custmer_vice_orders_report_table(customer_id) {
+    var brancch_id = $('#branchComboBox').val();
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "custmer_vice_orders_report_table", customer_id: customer_id, brancch_id: brancch_id}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="9" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.custmer_vice_orders_report_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                var status = parseInt(qData.jbStatus);
+                tableData += '<tr ' + (parseInt(qData.jbStatus) === 1 ? 'class="success"' : 'class="danger"') + '>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.jbDesc + '</td>';
+                tableData += '<td>' + qData.jbDt + '</td>';
+                tableData += '<td>' + qData.jbDiscountRt + '</td>';
+                tableData += '<td>' + qData.jbQty + '</td>';
+                tableData += '<td>' + qData.jbUnitPrice + '</td>';
+                if (status === 1) {
+                    tableData += '<td><button class="btn btn-primary btn-sm selected_job_id" value="' + qData.aiID + '"><i class="glyphicon glyphicon-new-window"></i></button></td>';
+                } else {
+                    tableData += '<td  style="font-family: fantasy; ">Pending </td>';
+                }
+                tableData += '</tr>';
+            });
+            $('.custmer_vice_orders_report_table tbody').html('').append(tableData);
+            tableSorter();
+            $('.selected_job_id').click(function() {
+                var job = parseInt($(this).val());
+                delevered_data_modal(job);
+            });
+        }
+    }, "json");
+}
+
+////////////// bank deta \\\\\\\\\\\\\\\\
+
+function loadBanksTable() {
+    var tableData;
+    $.post("views/loadTables.php", {table: "loadBanksTable"}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr class="error text-centered"><td colspan="4"> -- No Data Found -- </td></tr>';
+            $('.loadBanksTable tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, tableValue) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + tableValue.bank_name + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary selBankData" value="' + tableValue.id + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button><button class="btn btn-danger delBankData" value="' + tableValue.id + '"><i class="fa fa-trash-o fa-lg"></i>&nbsp;Delete</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.loadBanksTable tbody').html('').append(tableData);
+            $('.selBankData').click(function() {
+                showBankActionBtn();
+                bankDataSelect($(this).val());
+            });
+            $('.delBankData').click(function() {
+                deleteBank($(this).val());
+            });
+        }
+    }, "json");
+}
+
+
+
+
+//samrulz creations
+
+function registerd_customer_table() {
+    var tableData = '';
+    var branchID = $('.branchComboBox').val();
+
+    $.post("views/loadTables.php", {table: "registerd_customer_table", branchComboDiv: branchID}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.customer_save_Table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.cusTel + '</td>';
+                tableData += '<td>' + qData.cusID + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_customer" value="' + qData.aiID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button>'
+//                        + '<button class="btn btn-danger delete_customer" value="' + qData.aiID + '"><i class="fa fa-trash-o fa-lg"></i>&nbsp;Delete</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.customer_save_Table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.select_customer').click(function() {
+                select_customer($(this).val());
+                $('#cust_reg_ActionBtn').removeClass('hidden');
+                $('#reset_cust').removeClass('hidden');
+                $('#cust_reg_Save').addClass('hidden');
+                $('#cust_reg_Update').removeClass('hidden');
+            });
+            $('.delete_customer').click(function() {
+                delete_customer($(this).val());
+            });
+        }
+    }, "json");
+}
+//anuruddha
+function delivery_table() {
+    var tableData = '';
+    var job_id = $('#jobComboBox').val()
+    var branch_id = $('#branchComboBox').val();
+    $.post("views/loadTables.php", {table: "delivery_table", job_id: job_id, branch_id: branch_id}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.delivery_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbDescription + '</td>';
+                tableData += '<td>' + qData.jbItemQty + '</td>';
+                tableData += '<td>' + qData.jbItemunitPrice + '</td>';
+                tableData += '<td>' + qData.jbDiscountRate + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary selectItem" value="' + qData.aid + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button></div></td>';
+//                        + '<button class="btn btn-danger delete_Delivery" value="' + qData.brID + '"><i class="fa fa-trash-o fa-lg"></i>&nbsp;Delete</button>\n\
+
+                tableData += '</tr>';
+            });
+            $('.delivery_table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.selectItem').click(function() {
+                $('#jobItemTblID').val($(this).val());
+                //select_Delivery();
+                getJobDescription();
+//                $('#systemdataUpdate').removeClass('hidden');
+//                $('#deliveryDataSave').addClass('hidden');
+//                $('#deliveryreset').removeClass('hidden');
+            });
+        }
+    }, "json");
+}
+
+function getUserRelatedJobs() {
+    var branchComboBox = $('.branchComboBox').val();
+    var customer = $('.customer').val();
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "jobsTbl", customer: customer, branchID: branchComboBox}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.jobDataTble tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.jbDt + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-info selectJobs" value="' + qData.aiID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.jobDataTble tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.selectJobs').click(function() {
+                $('#completedInvoSection').addClass("hidden");
+                $('#underItems').removeClass("hidden");
+                var data = $(this).val();
+                getLastStetusJobItem(data);
+                document.getElementById("copleatInvo").disabled = false;
+            });
+        }
+    }, "json");
+}
+
+function getCompletedInvoices() {
+    var branchComboBox = $('.branchComboBox').val();
+    var tableData = '';
+    var date_from = $('#date_tbl_from').val();
+    var date_to = $('#date_tbl_to').val();
+    $.post("views/loadTables.php", {table: "getcompletedInvo", branchID: branchComboBox, date_from: date_from, date_to: date_to}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.copletedJobs tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.billID + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.billDt + '</td>';
+                tableData += '<td>' + qData.totalPayable + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-info selectInvoice" value="' + qData.aiID + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;View Invoice</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.copletedJobs tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.selectInvoice').click(function() {
+                var data = $(this).val();
+                submitSingleDataByPost("invoiceView.php", "invoTblID", data);
+            });
+        }
+    }, "json");
+}
+
+function getCustomer_detailz_for_branches(bran) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "customer_detailz", bran: bran}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.customer_detail_report_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.cusAddressOne + qData.cusAddressTwo + qData.cusAddressThree + '</td>';
+                tableData += '<td>' + qData.cusTel + '</td>';
+                tableData += '<td>' + qData.cusContactPers + '</td>';
+                tableData += '<td>' + qData.cusRegDt + '</td>';
+                tableData += '<td><button class="btn btn-info selected_custmr" value="' + qData.cusID + '"><i class="fa fa-shopping-cart"></i>&nbsp; Add Job</button></td>';
+
+                tableData += '</tr>';
+            });
+            $('.customer_detail_report_table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.selected_custmr').click(function() {
+                var data = $(this).val();
+                confirm(":: Add Job ::", "Are You Sure you want to add job for this customer ?", "No", "Yes", function() {
+                    submitSingleDataByPost("jobReg.php", "customer_id", data);
+                });
+            });
+        }
+    }, "json");
+}
+function date_range_vice_income(date_from, date_to) {
+    var tableData = '';
+    var total_cash_pay = 0;
+    var total_cheque_pay = 0;
+    var total_payble_sum = 0;
+    var tfoot = '';
+    $.post("views/loadTables.php", {table: "date_range_vice_income", date_from: date_from, date_to: date_to}, function(e) {
+        $('#panel_hd').html('Common Sales Report. ::  From : <b>' + date_from + '</b>    To : <b>' + date_to + '</b>');
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            tfoot += '';
+            $('.date_range_vice_income_report_table tbody').html('').append(tableData);
+            $('.date_range_vice_income_report_table tfoot').html('').append(tfoot);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                total_cash_pay += parseFloat(qData.totalCashPay);
+                total_cheque_pay += parseFloat(qData.totalChequePay);
+                total_payble_sum += parseFloat(qData.totalPayable);
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.cusName + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.billDt + '</td>';
+                tableData += '<td>' + qData.pay_type_name + '</td>';
+                tableData += '<td class="text-right">' + qData.totalPayable + '</td>';
+                tableData += '</tr>';
+            });
+            tfoot += '<tr  style="background-color: #faf2cc;">';
+            tfoot += '<td colspan="3" class="text-right"></td>';
+            tfoot += '<td colspan="2" class="text-right"><b>Summary-</b>&nbsp;&nbsp;Cash :' + total_cash_pay.toFixed(2) + ' + Cheque : ' + total_cheque_pay.toFixed(2) + ' </td>';
+            tfoot += '<td class="text-right"><b>Total&nbsp;&nbsp;</b><b> ' + total_payble_sum.toFixed(2) + ' </b></td>';
+            tfoot += '</tr>';
+            $('.date_range_vice_income_report_table tbody').html('').append(tableData);
+            $('.date_range_vice_income_report_table tfoot').html('').append(tfoot);
+            tableSorter();
+        }
+    }, "json");
+}
+function customer_date_range_vice_income(date_from, date_to, custID) {
+    var tableData = '';
+    var total_cash_pay = 0;
+    var total_cheque_pay = 0;
+    var total_payble_sum = 0;
+    var tfoot = '';
+    $.post("views/loadTables.php", {table: "customer_date_range_vice_income", date_from: date_from, date_to: date_to, custID: custID}, function(e) {
+        $('#panel_hd').html('Common Sales Report. ::  From : <b>' + date_from + '</b>    To : <b>' + date_to + '</b>');
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            tfoot += '';
+            $('.customer_date_range_vice_income_report_table tbody').html('').append(tableData);
+            $('.customer_date_range_vice_income_report_table tfoot').html('').append(tfoot);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                total_cash_pay += parseFloat(qData.totalCashPay);
+                total_cheque_pay += parseFloat(qData.totalChequePay);
+                total_payble_sum += parseFloat(qData.totalPayable);
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbID + '</td>';
+                tableData += '<td>' + qData.billDt + '</td>';
+                tableData += '<td>' + qData.pay_type_name + '</td>';
+                tableData += '<td class="text-right">' + qData.totalPayable + '</td>';
+                tableData += '</tr>';
+            });
+            tfoot += '<tr  style="background-color: #faf2cc;">';
+            tfoot += '<td colspan="3" class="text-right"></td>';
+            tfoot += '<td class="text-right"><b>Summary-</b>&nbsp;&nbsp;Cash :' + total_cash_pay.toFixed(2) + ' + Cheque : ' + total_cheque_pay.toFixed(2) + ' </td>';
+            tfoot += '<td class="text-right"><b>Total&nbsp;&nbsp;</b><b> ' + total_payble_sum.toFixed(2) + ' </b></td>';
+            tfoot += '</tr>';
+            $('.customer_date_range_vice_income_report_table tbody').html('').append(tableData);
+            $('.customer_date_range_vice_income_report_table tfoot').html('').append(tfoot);
+            tableSorter();
+        }
+    }, "json");
+}
+
+function getLastStetusJobItem(data) {
+    var branchComboBox = $('.branchComboBox').val();
+    var customer = $('.customer').val();
+    var tableData = '';
+    var totInvoSum = 0;
+    var totInvoDisc = 0;
+    var jobID;
+    $.post("views/loadTables.php", {table: "jobLastStstus", customer: customer, branchID: branchComboBox, jobTblID: data}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="5" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.itemLastStsus tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.jbDescription + '</td>';
+                tableData += '<td>' + qData.jbItemQty + '</td>';
+                tableData += '<td>' + qData.totDellQty + '</td>';
+                var totAmount = parseFloat(qData.totDellQty) * parseFloat(qData.jbItemunitPrice);
+                tableData += '<td>' + totAmount.toFixed(2) + '</td>';
+                var totDiscount = (parseFloat(totAmount) * parseFloat(qData.jbDiscountRate)) / parseInt(100)
+                tableData += '<td>' + totDiscount + '</td>';
+                tableData += '</tr>';
+                totInvoSum += totAmount;
+                totInvoDisc += totDiscount;
+                jobID = qData.jbID;
+            });
+            $('.itemLastStsus tbody').html('').append(tableData);
+            $('#jobNo').val(jobID);
+            $('#price').val(totInvoSum.toFixed(2));
+            $('#cashAmount').val(totInvoSum.toFixed(2));
+            $('#discount').val(totInvoDisc.toFixed(2));
+            $('#itemTblSelected').html('Selected Job No. :: ' + jobID);
+        }
+    }, "json");
+}
+
+function loadvatnbt() {
+    var tableData;
+    $.post("views/loadTables.php", {table: "vatnbt"}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr class="error text-centered"><td colspan="4"> -- No Data Found -- </td></tr>';
+            $('.vatnbttbl tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, tableValue) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + tableValue.vat + '</td>';
+                tableData += '<td>' + tableValue.nbt + '</td>';
+                tableData += '</tr>';
+            });
+            $('.vatnbttbl tbody').html('').append(tableData); 
+        }
+    }, "json");
+}
+
+//////////////// SANJEEWA \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+function repair_vehicle_table(ve_id) {
+    var tableData = '';
+    $.post("views/loadTables.php", {table: "repair_vehicle_table", ve_id:ve_id}, function(e) {
+        if (e === undefined || e.length === 0 || e === null) {
+            tableData += '<tr><th colspan="6" class="alert alert-warning text-center"> -- No Data Found -- </th></tr>';
+            $('.vehicle_repair_data_table tbody').html('').append(tableData);
+        } else {
+            $.each(e, function(index, qData) {
+                index++;
+                tableData += '<tr>';
+                tableData += '<td>' + index + '</td>';
+                tableData += '<td>' + qData.rp_date + '</td>';
+                tableData += '<td>' + qData.rp_place + '</td>';
+                tableData += '<td>' + qData.rp_desc + '</td>';
+                tableData += '<td>' + qData.rp_cost + '</td>';
+//                tableData += '<td>' + qData.brTel + '</td>';
+                tableData += '<td><div class="btn-group"><button class="btn btn-primary select_vehicle" value="' + qData.rp_id + '"><i class="fa fa-plus-square fa-lg"></i>&nbsp;Select</button>'
+                        + '<button class="btn btn-danger delete_branch" value="' + qData.rp_id + '"><i class="fa fa-trash-o fa-lg"></i>&nbsp;Delete</button></div></td>';
+                tableData += '</tr>';
+            });
+            $('.vehicle_repair_data_table tbody').html('').append(tableData);
+            tableSorter();
+
+            $('.select_vehicle').click(function() {
+                select_branches($(this).val());
+            });
+            $('.delete_branch').click(function() {
+                var branchID = $(this).val();
+                confirm("Delete Branch", "Are You Want To Delete This Branch", "Cancel", "Delete", function() {
+                    delete_branches(branchID);
+                });
+            });
+        }
+    }, "json");
+}

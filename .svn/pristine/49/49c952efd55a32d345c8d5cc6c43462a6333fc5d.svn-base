@@ -1,0 +1,323 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>        
+    </head>
+    <body>
+        <div id="wrap"><!-- class="bgCustome"-->
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">               
+                <div class="row">                                 
+                    <div class="col-md-12">
+                        <div class="page-header">
+                            <h3>Register New Customers</h3>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-horizontal">
+                                    <input type="hidden" id="cushiddenid">
+                                    <div class="form-group hidden">
+                                        <label for="branch" class="col-md-4 control-label">Branch:</label>
+                                        <div class="col-md-6 branchcomboDiv">
+                                            <input class="branchComboBox" readonly="" id="branchComboBox" value="<?php echo $_SESSION['branch']; ?>">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label for="customer_reg_no" class="col-lg-4 control-label">Customer Register No:</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" id="customer_reg_no" class="form-control" placeholder="Customer Register No" readonly="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vat_reg_no" class="col-lg-4 control-label">Vat Register No:</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" id="vat_reg_no" class="form-control" placeholder="Vat Register No">
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="email_val form-group ">
+                                        <label for="customer_name" class="col-lg-4 control-label">Customer Name:</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                <input type="text" style="background-color: #d9edf7; font-weight: bold;" id="customer_name" class="form-control" placeholder="Customer Name" required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="email_val form-group ">
+                                        <label for="customer_adress" class="col-lg-4 control-label"> Address :</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <input type="text" style="background-color: #dff0d8" id="customer_adress1" class="form-control" placeholder="Customer adress1" required>
+                                                <input type="text" style="background-color: #dff0d8" id="customer_adress2" class="form-control" placeholder="Customer adress2" required>
+                                                <input type="text" style="background-color: #dff0d8" id="city" class="form-control" placeholder="City/Town" required>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="title" class="col-md-4 control-label">Title:</label>
+                                        <div class="col-md-6 titlecomboComboBoxDiv">
+                                            <select id="titlecombo" class="form-control titlecomboComboBox" placeholder=""></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="contact_person" class="col-lg-4 control-label">Contact person:</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" id="contactperson" class="form-control" placeholder="Contact person" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="email_val form-group ">
+                                        <label for="telephone_number" class="col-lg-4 control-label">Contact Person Tel:</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                                <input type="text" id="cont_tel_number" onkeypress="return isNumberKey(event)" class="form-control" placeholder="ex: 011XXXXXXX" maxlength="10" required>
+                                            </div>
+                                            <h6 id="phonecusreg" style="color: red;"></h6>
+                                            <h6 id="pphone" style="color: green;"></h6>
+
+                                        </div>
+                                    </div>
+                                    <div class="email_val form-group ">
+                                        <label for="telephone_number" class="col-lg-4 control-label">Office Telephone No1:</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></div>
+                                                <input type="text" id="office_number1" onkeypress="return isNumberKey(event)" class="form-control" placeholder="ex: 011XXXXXXX" maxlength="10" required>
+                                            </div>
+                                            <h6 id="ofnok1" style="color: red;"></h6>
+                                            <h6 id="ofok1" style="color: green;"></h6>
+
+                                        </div>
+                                    </div>
+                                    <div class="email_val form-group ">
+                                        <label for="telephone_number" class="col-lg-4 control-label">Office Telephone No2:</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></div>
+                                                <input type="text" id="office_number2" onkeypress="return isNumberKey(event)" class="form-control" placeholder="ex: 011XXXXXXX" maxlength="10" required>
+                                            </div>
+                                            <h6 id="ofnok2" style="color: red;"></h6>
+                                            <h6 id="ofok2" style="color: green;"></h6>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="email_val form-group ">
+                                        <label for="registration_date" class="col-lg-4 control-label">Registration Date:</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12">
+                                                <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                                <input type="text" class="form-control datepicker reg_Date" id="reg_Date" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-4 col-lg-10">
+                                            <span  id="customerregSaveActionBtn" class="">
+                                                <button class="btn btn-success" id="cust_reg_Save"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+                                            </span>
+                                            <span  id="cust_reg_ActionBtn" class="hidden">
+                                                <button class="btn btn-warning" id="cust_reg_Update"><i class="fa fa-edit fa-lg"></i>&nbsp;Update</button>
+                                            </span>
+                                            <span  id="reset_cust" class="hidden">
+                                                <button class="btn btn-primary" id="reset_cust"><i class="fa fa-edit fa-lg"></i>&nbsp;Reset</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Registered Customers</h3>
+
+
+                                        <div class="pull-right">
+                                            <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body filterTableSearch">
+                                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters=".customer_save_Table"/>
+                                    </div>
+                                    <div class="scrollable" style="height: 450px; overflow-y: auto">
+                                        <table class="table table-bordered table-striped table-hover datable customer_save_Table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Telephone</th>
+                                                    <th>registration No</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                                             
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="system_id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php // require_once './include/footerBar.php'; ?>
+        <?php require_once './include/systemFooter.php'; ?>
+    </body>
+    <script type="text/javascript">
+        $(function() {
+            pageProtect();
+            checkurl();
+            $('#logout').click(function() {
+                logout();
+            });
+            $(window).load(function() {
+                title_ComboBox();
+                registerd_customer_table();
+                customer_registration_number($('.branchComboBox').val());
+                registerd_customer_table();
+            });
+            //  $('select').chosen({width: "100%"});
+
+            $('#cust_reg_Save').click(function() {
+                customer_registration_save();
+            });
+            $('.datepicker').datepicker({
+                orientation: "auto left"
+            });
+            $('#branchComboBox').change(function() {
+                var branch_id = $(this).val();
+                customer_registration_number(branch_id);
+                registerd_customer_table();
+            });
+            $('#cust_reg_Update').click(function() {
+                update_customer();
+                $('#reset_cust').addClass('hidden');
+                $('#cust_reg_Update').addClass('hidden');
+                $('#cust_reg_Save').removeClass('hidden');
+            });
+            $('#reset_cust').click(function() {
+                clearcustomerdata();
+                customer_registration_number($('.branchComboBox').val());
+                $('#cust_reg_Save').removeClass('hidden');
+                $('#cust_reg_ActionBtn').addClass('hidden');
+                $('#reset_cust').addClass('hidden');
+            });
+//phone number validation
+            $('#cont_tel_number').on('keyup', function() {
+                var phonecusregval = $(this).val().length;
+                if (phonecusregval == '0' || phonecusregval == '10') {
+                    $('#cust_reg_Save').removeClass('hidden');
+                    if (phonecusregval == '10') {
+                        $('#phonecusreg').html('');
+                        $('#pphone').html('<i class="glyphicon glyphicon-ok-sign"> Valid phone number</i> ');
+                    } else {
+                        $('#phonecusreg').html('');
+                        $('#cust_reg_Save').removeClass('hidden');
+                        $('#pphone').html('<i class="glyphicon glyphicon-ok-sign"> No phone number entered. But you can save.! </i> ');
+                    }
+                } else {
+                    $('#cust_reg_Save').addClass('hidden');
+                    $('#phonecusreg').html('<i class="glyphicon glyphicon-warning-sign"></i> Sorry... Invalid Phone Number');
+                    $('#pphone').html('');
+                }
+            });
+            $('#office_number1').on('keyup', function() {
+                var phonecusregval = $(this).val().length;
+                if (phonecusregval == '0' || phonecusregval == '10') {
+                    $('#cust_reg_Save').removeClass('hidden');
+                    if (phonecusregval == '10') {
+                        $('#ofnok1').html('');
+                        $('#ofok1').html('<i class="glyphicon glyphicon-ok-sign"> Valid phone number</i> ');
+                    } else {
+                        $('#ofnok1').html('');
+                        $('#cust_reg_Save').removeClass('hidden');
+                        $('#ofok1').html('<i class="glyphicon glyphicon-ok-sign"> No phone number entered. But you can save.! </i> ');
+                    }
+                } else {
+                    $('#cust_reg_Save').addClass('hidden');
+                    $('#ofnok1').html('<i class="glyphicon glyphicon-warning-sign"></i> Sorry... Invalid Phone Number');
+                    $('#ofok1').html('');
+                }
+            });
+            $('#office_number2').on('keyup', function() {
+                var phonecusregval = $(this).val().length;
+                if (phonecusregval == '0' || phonecusregval == '10') {
+                    $('#cust_reg_Save').removeClass('hidden');
+                    if (phonecusregval == '10') {
+                        $('#ofnok2').html('');
+                        $('#ofok2').html('<i class="glyphicon glyphicon-ok-sign"> Valid phone number</i> ');
+                    } else {
+                        $('#ofnok2').html('');
+                        $('#cust_reg_Save').removeClass('hidden');
+                        $('#ofok2').html('<i class="glyphicon glyphicon-ok-sign"> No phone number entered. But you can save.! </i> ');
+                    }
+                } else {
+                    $('#cust_reg_Save').addClass('hidden');
+                    $('#ofnok2').html('<i class="glyphicon glyphicon-warning-sign"></i> Sorry... Invalid Phone Number');
+                    $('#ofok2').html('');
+                }
+            });
+
+            $(document).ready(function()
+            {
+                $(document).bind("contextmenu", function(e) {
+                    return false;
+                });
+            });
+
+            document.onkeypress = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-12');
+                    return false;
+                }
+            }
+            document.onmousedown = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-keys');
+                    return false;
+                }
+            }
+            document.onkeydown = function(event) {
+                event = (event || window.event);
+                if (event.keyCode == 123) {
+                    //alert('No F-keys');
+                    return false;
+                }
+            }
+
+        });
+    </script>
+
+</html>
+

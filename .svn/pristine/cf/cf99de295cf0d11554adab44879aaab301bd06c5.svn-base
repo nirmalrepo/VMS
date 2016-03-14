@@ -1,0 +1,216 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>        
+    </head>
+    <body>
+        <div id="wrap"><!-- class="bgCustome"-->
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">               
+                <div class="row">                                 
+                    <div class="col-md-12">
+                        <div class="page-header">
+                            <h3>Fuel Management</h3>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-horizontal">
+                                    <input type="hidden" id="hidden_fuel">
+
+                                    <div id="main_reg_data">
+
+                                        <div class="form-group">
+                                            <label for="" class="col-md-4 control-label">Branch: </label>
+                                            <div class="col-md-5 braComboDiv input-group">
+                                                <select class="branchComboBox" id="rp_branch"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="" class="col-md-4 control-label">Register No: </label>
+                                            <div class="col-md-5 input-group vehicleComboBoxDiv">
+                                                <select class="vehicleComboBox" id="rp_vehicle">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="system_name" class="col-md-4 control-label required-field">Date :</label>
+                                            <div class="col-md-5 input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                <input type="text" id="rp_date" class="form-control datepicker" data-date-format="yyyy-mm-dd" value="<?php echo date('Y-m-d'); ?>">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="qty_fuel" class="col-lg-4 control-label required-field">QTY of fuel:</label>
+                                            <div class="col-md-5 input-group">
+                                                <input type="text"  id="qty_fuel" class="form-control" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fuel_cost" class="col-lg-4 control-label required-field">Cost:</label>
+                                            <div class="col-md-5 input-group">
+                                                <input type="text"  id="fuel_cost" class="form-control" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-4 col-lg-10">
+
+                                                <span  id="vehi_reg_save_btn_div" class="">
+                                                    <button class="btn btn-info" id="fuel_mmnmnt_save"><i class="fa fa-sign-in fa-lg"></i>&nbsp;Save</button>
+                                                    <button class="btn btn-danger" id="job_reg_reset_btn"><i class="fa fa-refresh fa-lg"></i>&nbsp;Clear</button>
+                                                    <!--<button class="btn btn-success" id="itm_add_btn"><i class="fa fa-save fa-lg"></i>&nbsp;Add Item</button>-->
+                                                </span>
+
+                                                <span  id="job_reg_update_btn_div" class="hidden">
+                                                    <button class="btn btn-warning" id="fuel_update"><i class="fa fa-check-square-o fa-lg"></i>&nbsp;Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+<!--                                        <br><br><br><br><br>
+                                        <div class="col-md-12" style="margin-left: 50px;">
+                                            <div id="gallery">
+                                                <a class=" thumbnail fancybox" rel="gallery1" href="js/fancyBox/img/1_bb.jpg" title="Westfield Waterfalls - Middletown CT Lower (Graham_CS)">
+                                                    <img src="js/fancyBox/img/1_ss.jpeg" alt="" />
+                                                </a>
+                                                <a class="thumbnail fancybox" rel="gallery1" href="js/fancyBox/img/2_bb.jpg" title="Calm Before The Storm (One Shoe Photography Ltd.)">
+                                                    <img src="js/fancyBox/img/2_ss.jpg" alt="" />
+                                                </a>
+                                                <a class="thumbnail fancybox" rel="gallery1" href="js/fancyBox/img/3_bb.jpg" title="Lambs Valley (JMImagesonline.com)">
+                                                    <img src="js/fancyBox/img/3_ss.jpg" alt="" />
+                                                </a>
+                                            </div>
+                                        </div>-->
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <!--T A B L E      D I V--> 
+                            <div class="col-md-7">
+                                <div id="main_data_table_div">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Fuel Consumption Records</h3>
+                                            <div class="pull-right">
+                                                <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                                    <i class="glyphicon glyphicon-filter"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body filterTableSearch">
+                                            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters=".fuel_managementdata"/>
+                                        </div>
+                                        <div class="scrollable" style="height: 350px; overflow-y: auto">
+                                            <table class="table table-bordered table-striped table-hover datable fuel_managementdata">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>QTY of fuel</th>                                                                   
+                                                        <th>Cost</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                             
+                                                </tbody>
+                                            </table>
+                                            <input type="hidden" id="system_id">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php // require_once './include/footerBar.php'; ?>
+        <?php require_once './include/systemFooter.php'; ?>
+
+
+    </body>
+
+    <script type="text/javascript">
+        $(function() {
+            pageProtect();
+            checkurl();
+            branchComboBox(false, function() {
+                vehicleComboBox(false, function() {
+                    fuel_management_table_load();
+                });
+            });
+            $('select').chosen({width: "100%"});
+
+//            fuel_management_table_load();
+
+            $('#rp_vehicle').change(function() {
+                fuel_management_table_load();
+            });
+
+            $('.branchComboBox').change(function() {
+                vehicleComboBox(false, function() {
+                    fuel_management_table_load();
+                });
+            });
+
+            $('.datepicker').datepicker({
+                orientation: "auto left"
+            });
+
+            $('#fuel_mmnmnt_save').click(function() {
+                save_fuel_management_data();
+            });
+
+            $(document).on('click', '.select_fuel', function() {
+                var fuel_id = $(this).val();
+                select_fuel_info_data(fuel_id);
+            });
+
+            $(document).on('click', '.delete_fuel', function() {
+                var fuel_del_id = $(this).val();
+                dlete_fuel_info_data(fuel_del_id);
+            });
+
+
+            $(document).on('click', '#fuel_update', function() {
+//                var fuel_del_id = $(this).val();
+                update_fuel_info_data();
+            });
+            
+             $('#job_reg_reset_btn').click(function () {
+                 empty_machine_repair_data();
+                 fuel_management_table_load();
+             });
+
+            if (!$.fancybox) {
+                console.log('no fancybox');
+            }
+//fancyBox
+            $(".fancybox").fancybox({
+                openEffect: 'none',
+                closeEffect: 'none'
+            });
+
+        });
+    </script>
+
+
+
+</html>
+

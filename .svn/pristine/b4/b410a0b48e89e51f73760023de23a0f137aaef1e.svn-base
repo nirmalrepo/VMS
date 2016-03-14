@@ -1,0 +1,223 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>        
+    </head>
+    <body>
+        <div id="wrap">
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">
+                <!--<div class="row">-->
+                    <div class="col-md-12">
+                        <div class="page-header">
+
+                            <h3>Vehicle Registration</h3>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Branch</label>
+                                <div class="col-md-6">
+                                    <select class="branchCombo form-control" id="branchCombo"><option></option></select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Type</label>
+                                <div class="col-md-6">
+                                    <select class="typeCombo form-control" id="typeCombo"><option></option></select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Purpose</label> 
+                                <div class="col-md-6">
+                                    <select class="purCombo form-control" id="purCombo"><option></option></select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Manufacture Country</label> 
+                                <div class="col-md-6">
+                                    <select class="manuCombo form-control" id="manuCombo"><option></option></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Condition</label>  
+                                <div class="col-md-6">
+                                    <select class="conCombo form-control" id="conCombo"><option></option></select>
+                                </div>
+
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Brand</label>  
+                                <div class="col-md-6">
+                                    <select class="brandCombo form-control" id="brandCombo"><option></option></select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Insurance Company</label>  
+                                <div class="col-md-6">
+                                    <select class="insCombo form-control" id="insCombo"><option></option></select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="col-md-4">Status</label>  
+                                <div class="col-md-6">
+                                    <select class="statusCombo form-control" id="statusCombo">
+                                        <option value="0">Active</option>
+                                        <option value="1">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">V ID</label>
+                                <div class="col-md-6">
+                                    <input type="text" class="vid form-control" id="vid">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Reg.No.</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="regNo" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Reg. Date</label>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                        <input type="text" class="form-control datepicker reg_Date" id="reg_Date" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Volume</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="volume" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Procure</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="procure" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Fuel Combustion(Km)</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="fuelComb" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Weight(Kg)</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="weight" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Engine Capacity(CC-Km/L)</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="engineC" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Manufacture Year</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="manuY" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Fuel Capacity(L)</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="fuelCa" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Value(Rs.)</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="valueRs" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Colour</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="colour" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Driver Name</label>
+                                <div class="col-md-6">
+                                    <input type="text" id="driverName" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4" style="text-align: right">Insurance Date</label>
+                                <div class="col-md-6">
+                                     <div class="input-group">
+                                        <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                        <input type="text" class="form-control datepicker insDate" id="insDate" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group col-lg-offset-4 col-lg-6">
+                                <span  id="customerregSaveActionBtn" class="">
+                                    <button class="btn btn-success" id="veh_reg_Save"><i class="fa fa-save fa-lg"></i>&nbsp;Save</button>
+                                </span>
+                                <span  id="cust_reg_ActionBtn" class="hidden">
+                                    <button class="btn btn-warning" id="veh_reg_Update"><i class="fa fa-edit fa-lg"></i>&nbsp;Update</button>
+                                </span>
+                                <span  id="reset_cust" class="hidden">
+                                    <button class="btn btn-primary" id="reset_hi"><i class="fa fa-edit fa-lg"></i>&nbsp;Reset</button>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+        </div>
+                <?php // require_once './include/footerBar.php'; ?>
+                <?php require_once './include/systemFooter.php'; ?>
+                </body>
+                <script type="text/javascript">
+                    $(function () {
+                        branch_combo_box_load(false, function () {
+                            vid_val_load($('#branchCombo').val());
+                        });
+                        type_combo_box_load();
+                        purpose_combo_box_load();
+                        manu_combo_box_load();
+                        condition_combo_box_load();
+                        brand_combo_box_load();
+                        company_combo_box_load();
+
+                        $('#branchCombo').change(function () {
+//                            alert();
+                            var branchVal = $(this).val();
+                            vid_val_load(branchVal);
+                        });
+
+                        $('#veh_reg_Save').click(function () {
+
+                            save_vehicle_reg();
+                        });
+
+                        $('.datepicker').datepicker({
+                            orientation: "auto left"
+                        });
+
+                    });
+                </script>
+
+
+                </html>
+

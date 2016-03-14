@@ -1,0 +1,173 @@
+<?php
+require_once './include/MainConfig.php';
+include './config/dbc.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>        
+        <?php require_once './include/systemHeader.php'; ?>        
+    </head>
+    <body>
+        <div id="wrap"><!-- class="bgCustome"-->
+            <?php require_once './include/navBar.php'; ?>
+            <div class="container-fluid">               
+                <div class="row">                                 
+                    <div class="col-md-12">
+                        <div class="page-header">
+                            <h3>Vehicle Dispose</h3>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-horizontal">
+                                    <input type="hidden" id="system_id">
+
+                                    <div id="main_reg_data">
+
+                                        <div class="form-group">
+                                            <label for="" class="col-md-4 control-label">Branch: </label>
+                                            <div class="col-md-5 braComboDiv input-group">
+                                                <select class="branchComboBox" id="rp_branch"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="" class="col-md-4 control-label">Vehicle: </label>
+                                            <div class="col-md-5 vehicleComboDiv input-group">
+                                                <select class="vehicleComboBox" id="rp_vehicle">
+                                                    <option value="1">Car</option>
+                                                    <option value="2">Van</option>
+                                                    <option value="3">Lorry</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="" class="col-md-4 control-label">Type: </label>
+                                            <div class="col-md-5 vehicleComboDiv input-group">
+                                                <select class="typeComboBox" id="vehicle_type">
+                                                    <option value="1">Dispose</option>
+                                                    <option value="2">Auction</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="system_name" class="col-md-4 control-label">Date :</label>
+                                            <div class="col-md-5 input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                <input type="text" id="disp_date" class="form-control datepicker" data-date-format="yyyy-mm-dd" value="<?php echo date('Y-m-d'); ?>">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="po_number" class="col-lg-4 control-label">Comment:</label>
+                                            <div class="col-md-5 input-group">
+                                                <!--<input type="text" onkeypress="return isNumberKey(event)" maxlength="12" id="po_number" class="form-control" placeholder="PO Number" >-->
+                                                <!--<input type="text" id="po_number" class="form-control" placeholder="" >-->
+                                                <textarea id="desc" class="form-control">
+                                                    
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label for="po_date" class="col-lg-4 control-label">Sell Amount:</label>
+                                            <div class="col-md-5 input-group">
+                                                <input type="text"  id="sell_amount" class="form-control" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-4 col-lg-10">
+
+                                                <span  id="vehi_dispose_save_btn_div" class="">
+                                                    <button class="btn btn-info" id="vehi_rep_save_btn"><i class="fa fa-sign-in fa-lg"></i>&nbsp;Save</button>
+                                                    <!--<button class="btn btn-success" id="itm_add_btn"><i class="fa fa-save fa-lg"></i>&nbsp;Add Item</button>-->
+                                                </span>
+
+                                                <span  id="vehicle_dispose_update_btn_div" class="hidden">
+                                                    <button class="btn btn-warning" id="vehicle_rep_Update_btn"><i class="fa fa-check-square-o fa-lg"></i>&nbsp;Update</button>
+                                                    <button class="btn btn-info" id="job_reg_reset_btn"><i class="fa fa-refresh fa-lg"></i>&nbsp;Clear</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <!--T A B L E      D I V--> 
+                            <div class="col-md-7">
+                                <div id="main_data_table_div">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Vehicle Dispose Informations</h3>
+                                            <div class="pull-right">
+                                                <span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                                    <i class="glyphicon glyphicon-filter"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body filterTableSearch">
+                                            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters=".vehicle_dispose_data_table"/>
+                                        </div>
+                                        <div class="scrollable" style="height: 350px; overflow-y: auto">
+                                            <table class="table table-bordered table-striped table-hover datable vehicle_dispose_data_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Comment</th>                                                                   
+                                                        <th>Sell Amount</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                             
+                                                </tbody>
+                                            </table>
+                                            <input type="hidden" id="disp_id">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php // require_once './include/footerBar.php'; ?>
+        <?php require_once './include/systemFooter.php'; ?>
+    </body>
+    <script type="text/javascript">
+        $(function() {
+            pageProtect();
+            checkurl();
+            branchComboBox();
+            dispose_vehicle_table($('#vehicle_type').val());
+            $('select').chosen({width: "100%"});
+
+
+            $('#vehi_dispose_save_btn_div').click(function() {
+                vehicleDisposeSave();
+            });
+
+            $('#vehicle_dispose_update_btn_div').click(function() {
+                update_vehicle_dispose($('#disp_id').val());
+            });
+
+            $('#vehicle_type').change(function() {
+                var ty_id = $(this).val();
+                dispose_vehicle_table(ty_id);
+            });
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
+</html>
+
